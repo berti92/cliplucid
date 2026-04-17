@@ -1,0 +1,30 @@
+api:
+  base_url: "http://localhost:1234/v1"
+  api_key: ""
+  model: "gpt-4.1-mini"
+
+voice:
+  # Recording uses a built-in sox command (16kHz mono).
+  # Install sox: brew install sox
+  language: "de"
+  # Path to a whisper.cpp ggml model file.
+  # Relative paths are resolved against config directory,
+  # then ~/.config/cliplucid/
+  whisper_model: "ggml-small.bin"
+
+actions:
+  - name: "Clipboard -> Popup"
+    hotkey: "cmd+shift+1"
+    mode: "popup"
+    prompt_file: "prompts/explain-error.md"
+
+  - name: "Clipboard+Voice -> Popup"
+    hotkey: "cmd+shift+2"
+    mode: "popup_voice"
+    prompt_file: "prompts/ask-with-voice.md"
+
+  - name: "Clipboard+Voice -> Clipboard"
+    hotkey: "cmd+shift+3"
+    mode: "clipboard_voice"
+    prompt_file: "prompts/rewrite-with-voice.md"
+    done_sound: "assets/done.wav"

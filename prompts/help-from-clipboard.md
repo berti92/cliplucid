@@ -1,0 +1,2 @@
+Erkläre das folgende:
+%CLIPBOARD%
