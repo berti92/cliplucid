@@ -22,6 +22,7 @@ Cliplucid is a macOS hotkey tool that sends clipboard and optional voice context
   - `System Settings -> Privacy & Security -> Microphone`
 - `sox` for recording (`brew install sox`)
 - `whisper-cli` (from `whisper.cpp`) for local speech-to-text
+- Available whisper model. You can download it as follows `curl -L -o ggml-small.bin https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small.bin`
 
 ## Installation
 
