@@ -456,7 +456,7 @@ func (a *App) startRecording() (*recordSession, error) {
 		return nil, errors.New("sox wurde nicht gefunden. Bitte installiere sox (brew install sox)")
 	}
 
-	tmpDir, err := os.MkdirTemp("", "helpme-audio-*")
+	tmpDir, err := os.MkdirTemp("", "cliplucid-audio-*")
 	if err != nil {
 		return nil, err
 	}
@@ -625,7 +625,7 @@ func (a *App) showMarkdownWindow(title string, markdown string) {
 
 		html := "<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>" + escapeHTML(title) + "</title><style>body{font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;margin:0;background:#f4f2ec;color:#1f1a14;}main{max-width:880px;margin:0 auto;padding:28px 24px 48px;line-height:1.6;}pre{background:#f0ead8;padding:12px;border-radius:10px;overflow:auto;}code{background:#ece4ce;padding:2px 6px;border-radius:6px;}blockquote{border-left:4px solid #9a7f50;padding-left:14px;color:#5e4d33;}h1,h2,h3{line-height:1.2;}table{border-collapse:collapse;}th,td{border:1px solid #d7cfbb;padding:8px;}</style></head><body><main>" + rendered.String() + "</main></body></html>"
 
-		dir, err := os.MkdirTemp("", "helpme-popup-*")
+		dir, err := os.MkdirTemp("", "cliplucid-popup-*")
 		if err != nil {
 			log.Printf("Failed to create popup: %v", err)
 			return
