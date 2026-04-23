@@ -100,22 +100,22 @@ func main() {
 
 	app, err := newApp(*configPath)
 	if err != nil {
-		log.Fatalf("Konfiguration konnte nicht geladen werden: %v", err)
+		log.Fatalf("Failed to load configuration: %v", err)
 	}
 
 	mainthread.Init(func() {
 		if err := app.registerHotkeys(); err != nil {
-			log.Fatalf("Hotkeys konnten nicht registriert werden: %v", err)
+			log.Fatalf("Failed to register hotkeys: %v", err)
 		}
 
-		log.Printf("helpme laeuft mit %d Hotkeys", len(app.bindings))
+		log.Printf("cliplucid is running with %d hotkeys", len(app.bindings))
 
 		sigCh := make(chan os.Signal, 1)
 		signal.Notify(sigCh, os.Interrupt, syscall.SIGTERM)
 		<-sigCh
 
 		app.unregisterHotkeys()
-		log.Println("Beendet")
+		log.Println("Stopped")
 	})
 }
 
@@ -220,7 +220,7 @@ func resolveConfigPath(configPath string) (string, error) {
 
 	fallback := filepath.Join(homeDir, ".config", "cliplucid", "config.yaml")
 	if _, err := os.Stat(fallback); err == nil {
-		log.Printf("Nutze Fallback-Konfiguration: %s", fallback)
+		log.Printf("Using fallback configuration: %s", fallback)
 		return fallback, nil
 	} else if !os.IsNotExist(err) {
 		return "", err
@@ -249,7 +249,7 @@ func resolvePromptPath(promptFile string, configDir string, fallbackRoot string)
 
 	fallback := filepath.Join(fallbackRoot, promptFile)
 	if _, err := os.Stat(fallback); err == nil {
-		log.Printf("Nutze Fallback-Prompt: %s", fallback)
+		log.Printf("Using fallback prompt: %s", fallback)
 		return fallback, nil
 	} else if !os.IsNotExist(err) {
 		return "", err
@@ -278,7 +278,7 @@ func resolveFilePath(pathValue string, configDir string, fallbackRoot string) (s
 
 	fallback := filepath.Join(fallbackRoot, pathValue)
 	if _, err := os.Stat(fallback); err == nil {
-		log.Printf("Nutze Fallback-Datei: %s", fallback)
+		log.Printf("Using fallback file: %s", fallback)
 		return fallback, nil
 	} else if !os.IsNotExist(err) {
 		return "", err
@@ -312,7 +312,7 @@ func (a *App) registerHotkeys() error {
 		a.bindings = append(a.bindings, b)
 
 		go a.runBinding(b)
-		log.Printf("Hotkey registriert: %-20s -> %s", action.Name, action.Hotkey)
+		log.Printf("Registered hotkey: %-20s -> %s", action.Name, action.Hotkey)
 	}
 
 	return nil
@@ -353,13 +353,13 @@ func (a *App) onKeyDown(b *binding) {
 		}
 		rec, err := a.startRecording()
 		if err != nil {
-			log.Printf("%s: Aufnahme konnte nicht starten: %v", b.action.Name, err)
+			log.Printf("%s: Failed to start recording: %v", b.action.Name, err)
 			a.showErrorWindow("Aufnahmefehler", err.Error())
 			return
 		}
 		b.recorder = rec
 		b.recording = true
-		log.Printf("%s: Aufnahme gestartet", b.action.Name)
+		log.Printf("%s: Recording started", b.action.Name)
 	}
 }
 
@@ -443,7 +443,7 @@ func (a *App) executeAction(action ActionConfig, voiceContext string) error {
 		}
 		if action.DoneSound != "" {
 			if err := playSound(action.DoneSound); err != nil {
-				log.Printf("%s: Hinweiston konnte nicht abgespielt werden: %v", action.Name, err)
+				log.Printf("%s: Failed to play completion sound: %v", action.Name, err)
 			}
 		}
 	}
@@ -533,7 +533,7 @@ func (a *App) stopAndTranscribe(rec *recordSession) (string, error) {
 	if text == "" {
 		return "", fmt.Errorf("Transkription hat keinen Text geliefert (%s.txt leer)", outputBase)
 	} else {
-		log.Printf("Transkription: %v", text)
+		log.Printf("Transcription: %v", text)
 	}
 
 	return text, nil
@@ -627,18 +627,18 @@ func (a *App) showMarkdownWindow(title string, markdown string) {
 
 		dir, err := os.MkdirTemp("", "helpme-popup-*")
 		if err != nil {
-			log.Printf("Popup konnte nicht erstellt werden: %v", err)
+			log.Printf("Failed to create popup: %v", err)
 			return
 		}
 		path := filepath.Join(dir, "response.html")
 		if err := os.WriteFile(path, []byte(html), 0o644); err != nil {
-			log.Printf("Popup konnte nicht geschrieben werden: %v", err)
+			log.Printf("Failed to write popup: %v", err)
 			return
 		}
 
 		openCmd := exec.Command("open", path)
 		if err := openCmd.Start(); err != nil {
-			log.Printf("Popup konnte nicht geoeffnet werden: %v", err)
+			log.Printf("Failed to open popup: %v", err)
 		}
 	}()
 }
